@@ -13,7 +13,7 @@ const FIVE_MINS_IN_MS = DEBUG ? 5 * 600 : 5 * 60000;
 const audio = ref(HTMLAudioElement);
 
 // Scheduling internals
-let active = true;
+let active = ref(false);
 let scheduleIndex = 0;
 const schedule = [
     { activity: PUMP, duration: TWENTY_MINS_IN_MS },
@@ -45,7 +45,7 @@ function millisToMinutesAndSeconds(millis) {
 
 // timer functionality
 function timerLoop() {
-    if (active) {
+    if (active.value) {
         duration -= 1000;
         timeLabel.value = millisToMinutesAndSeconds(duration);
 
@@ -73,12 +73,59 @@ setInterval(timerLoop, 1000);
 
 <template>
     <h1>Pumping Power Hour</h1>
-    <h2>{{ activityLabel }}</h2>
-    <h2>{{ timeLabel }}</h2>
-    <audio hidden="true" ref="audio">
-        <source src="./../assets/alarmBell.mp3" type="audio/mpeg">
-    </audio>
+    <section class="container">
+        <div class="timer" :class="{ active: activityLabel === PUMP }">
+            <h1>{{ activityLabel }}</h1>
+            <h2>{{ timeLabel }}</h2>
+            <audio hidden="true" ref="audio">
+                <source src="./../assets/alarmBell.mp3" type="audio/mpeg">
+            </audio>
+        </div>
+    </section>
+
+    <section class="interface">
+        <button @click="active = !active">
+            {{ active ? "PAUSE" : "PLAY" }}
+        </button>
+    </section>
 </template>
 
 <style scoped>
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.timer {
+    background-color: red;
+    border-radius: 100%;
+    min-width: 300px;
+    min-height: 300px;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.timer.active {
+    background-color: green;
+}
+
+.timer h1 {
+    font-size: 4em;
+    margin: 0;
+    color: white;
+}
+
+.timer h2 {
+    font-size: 2em;
+    color: white;
+    margin: 0;
+}
+
+.interface button {
+    font-size: 2em;
+    margin-top: 1em;
+}
 </style>
