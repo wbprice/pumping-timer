@@ -25,7 +25,7 @@ let scheduleIndex = 0;
 let currentSchedule = schedule[scheduleIndex];
 let duration = currentSchedule.duration;
 let timeLabel = ref(millisToMinutesAndSeconds(duration));
-let activityLabel = ref(PUMP);
+let activityLabel = ref(currentSchedule.activity);
 
 // Convert milleseconds to a minute and seconds string
 function millisToMinutesAndSeconds(millis) {
@@ -48,7 +48,7 @@ function timerLoop() {
         if (duration <= 0) {
             // chime bell effect
             audio.value.play();
-            // Is there another scheduled activity?
+            // Is there another scheduled activity up next?
             if (scheduleIndex < schedule.length - 1) {
                 scheduleIndex += 1;
                 currentSchedule = schedule[scheduleIndex];
