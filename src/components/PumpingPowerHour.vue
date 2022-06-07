@@ -88,6 +88,8 @@ setInterval(timerLoop, 1000);
             {{ active ? "PAUSE" : "PLAY" }}
         </button>
     </section>
+
+    <p class="dedication">For Rosalina ❤️</p>
 </template>
 
 <style scoped>
@@ -128,4 +130,9 @@ setInterval(timerLoop, 1000);
     font-size: 2em;
     margin-top: 1em;
 }
+
+.dedication {
+    margin-top: 1em;
+}
+
 </style>
