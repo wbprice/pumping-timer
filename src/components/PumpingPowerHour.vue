@@ -5,7 +5,7 @@ const PUMP = "PUMP";
 const REST = "REST";
 const DONE = "DONE";
 
-const DEBUG = true;
+const DEBUG = false;
 const TWENTY_MINS_IN_MS = DEBUG ? 20 * 600 : 20 * 60000;
 const TEN_MINS_IN_MS = DEBUG ? 10 * 600 : 10 * 60000;
 const FIVE_MINS_IN_MS = DEBUG ? 5 * 600 : 5 * 60000;
