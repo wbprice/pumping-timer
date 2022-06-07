@@ -5,11 +5,16 @@ const PUMP = "PUMP";
 const REST = "REST";
 const DONE = "DONE";
 
-const TWENTY_MINS_IN_MS = 20 * 60000;
-const TEN_MINS_IN_MS = 10 * 60000;
-const FIVE_MINS_IN_MS = 5 * 60000;
+const DEBUG = true;
+const TWENTY_MINS_IN_MS = DEBUG ? 20 * 600 : 20 * 60000;
+const TEN_MINS_IN_MS = DEBUG ? 10 * 600 : 10 * 60000;
+const FIVE_MINS_IN_MS = DEBUG ? 5 * 600 : 5 * 60000;
 
 const audio = ref(HTMLAudioElement);
+
+// Scheduling internals
+let active = true;
+let scheduleIndex = 0;
 const schedule = [
     { activity: PUMP, duration: TWENTY_MINS_IN_MS },
     { activity: REST, duration: TEN_MINS_IN_MS },
@@ -20,9 +25,9 @@ const schedule = [
     { activity: PUMP, duration: FIVE_MINS_IN_MS },
 ];
 
-let active = true;
-let scheduleIndex = 0;
 let currentSchedule = schedule[scheduleIndex];
+
+// The labels to be displayed to the user
 let duration = currentSchedule.duration;
 let timeLabel = ref(millisToMinutesAndSeconds(duration));
 let activityLabel = ref(currentSchedule.activity);
@@ -43,7 +48,6 @@ function timerLoop() {
     if (active) {
         duration -= 1000;
         timeLabel.value = millisToMinutesAndSeconds(duration);
-        activityLabel.value = currentSchedule.activity;
 
         if (duration <= 0) {
             // chime bell effect
@@ -53,8 +57,9 @@ function timerLoop() {
                 scheduleIndex += 1;
                 currentSchedule = schedule[scheduleIndex];
                 duration = currentSchedule.duration
-                // If not, we're done
+                activityLabel.value = currentSchedule.activity;
             } else {
+                // If not, we're done
                 active = false;
                 activityLabel.value = DONE;
             }
@@ -62,6 +67,7 @@ function timerLoop() {
     }
 }
 
+// invoke timer loop once a second
 setInterval(timerLoop, 1000);
 </script>
 
